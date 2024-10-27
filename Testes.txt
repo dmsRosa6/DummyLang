@@ -1,0 +1,60 @@
+No trabalho está implementado o intpretador 1 e 2 e o compilador 1
+
+//	Interpretador e compilador 1 exemplos 
+
+println(2+10);;
+
+println("abc");;
+
+{let a = 2; a+1};;
+
+{let a = 2;let b=1; println(a+b)};;
+
+{let a = 2;{let b=a;b}; println(a)};;
+
+{let a = new 0; a:= 1;println(!a)};;
+
+{let x = 1; let y = {let a=2;a};println(x+y)};;
+
+if 2==2 {println(2)} {println(3)};;
+
+println(true&&(true || false) && false);;
+
+
+
+
+**Exemplos Interpretador**
+
+//	Interpretador 1
+
+println("bom"+ " "+ "dia");;
+
+{let a = 2; a+1};;
+
+{let a = 2;let b=1; println(a+b)};;
+
+{let a = 2;{let b=a;b}; println(a)};;
+
+{let a = new 0; let b = new (!a + 1); if !a==0 { a } { b } := 2; println(!a + !b)};;
+
+{let MAX = 10; let x = new MAX; let s = new 0; while !x>0 { s:=!s+!x; x:=!x-1 }; println (!s)};;
+
+if {let a = 2; let b = 3; b + a} == 5 { 2 } { 3 };;
+
+{let x = 1; let y = {let a=2;a};println(x+y)};;
+
+{let a = new 1; let b = new a;println (!!b) };;
+
+{let x = new 10;while !x>0 {x:=!x-1;println (!x) }};;
+
+{let x = new 10;while !x>0 {println (!x); x:=!x-1}};;
+
+
+
+//	Interpretador 2
+
+{let x = 3;let y =2; fn f(n,j){let a = 2+n;n*(j+a)};println (f(x,y))};;
+
+{let x = 6;fn fibonacci(n){if n==1 {1}{if n==2 {1}{fibonacci(n-1)+fibonacci(n-2)}}}; println(fibonacci(x))};;
+
+{let x = 5; fn fatorial(n){if n==1 || n==0 {1}{n*fatorial(n-1)}};println(fatorial(x))};;

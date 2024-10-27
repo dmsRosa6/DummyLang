@@ -1,0 +1,240 @@
+PARSER_BEGIN(Parser)
+
+import java.util.List;import java.util.Map;
+import java.util.HashMap;import java.util.ArrayList;
+public class Parser{
+    public Parser(){}
+}
+
+PARSER_END(Parser)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\r"
+| "\n"
+}
+
+TOKEN :
+{
+  <FUN: "fn">
+  |
+  <COMMA: ",">
+  |
+  <WHILE: "while">
+  |
+  <IF: "if">
+  |
+  < BOOLEAN: ( "true" | "false") >
+  |
+  <LET: "let">
+  |
+  <NEW:"new">
+  |
+  <ASSIGN: ":=">
+  |
+  <REF : "!">
+  |
+  <PRINTLN: "println">
+  |
+  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+  |
+  < Num: (["0"-"9"]) + >
+  |
+  <LOGICALEQUAL: "==">
+  |
+  <LOWER: "<">
+  |
+  <LOWEROREQUAL: "<=">
+  |
+  <OR:"||">
+  |
+  <AND:"&&">
+  |
+  <NOT: "~">
+  |
+  <GREATER: ">">
+  |
+  <GREATEROREQUAL: ">=">
+  |
+  < PLUS : "+" >
+  |
+  < MINUS : "-">
+  |
+  < TIMES : "*">
+  |
+  < DIV : "/">
+  |
+  < LPAR : "(" >
+  |
+  < RPAR : ")" >
+  |
+  < LBRA : "{" >
+  |
+  < RBRA : "}" >
+  |
+  < EQUAL: "=" >
+  |
+  < SEMCOL: ";" >
+  |
+  < FINAL: ";;">
+  |
+  <STRING: "\""( ["a"-"z","A"-"Z","0"-"9"," ",".","!","?","@","#","$","%","^","&","*","(",")","-","_","+","="])+  "\"" >
+}
+
+ASTNode Start():
+{ ASTNode t; }
+{
+   t = S() <FINAL>
+   { return t; }
+}
+
+ASTNode S():
+{Token op;
+     ASTNode t1, t2;}
+{
+  t1 = SE() ( LOOKAHEAD(2) <SEMCOL> t2=SE() {
+    t1 = new ASTSemCol(t1, t2);
+    })*
+
+  { return t1;}
+}
+
+ASTNode SE():
+{ Token op;
+      ASTNode t1, t2;}
+{
+  t1 = BA() ( LOOKAHEAD(2) <ASSIGN> t2=BA() {
+	t1 = new ASTAssign(t1, t2);
+    })*
+  { return t1;}
+}
+
+ASTNode BA():
+{
+    Token op;
+    ASTNode t1, t2;
+}
+{
+t1=BM()  (LOOKAHEAD(2) op=<OR> t2=BM() {
+    			t1 = new ASTOr(t1,t2);
+    			})*
+  { return t1;}
+}
+
+ASTNode BM():
+{
+    Token op;
+    ASTNode t1, t2;
+}
+{
+t1=Relop() ( LOOKAHEAD(2) op=<AND> t2=Relop() {
+    			t1 = new ASTAnd(t1,t2);
+    			})*
+  { return t1;}
+}
+
+ASTNode Relop():
+{
+    Token op;
+    ASTNode t1, t2;
+}
+{
+t1=Exp() ( LOOKAHEAD(2) (op=<GREATER> | op=<LOWER> | op=<LOWEROREQUAL> | op=<GREATEROREQUAL> | op=<LOGICALEQUAL>) t2=Exp() {
+    			switch (op.kind){
+                    case GREATER:
+                        t1 = new ASTGreater(t1,t2);
+                    break;
+                    case LOWER:
+                        t1 = new ASTLower(t1,t2);
+                    break;
+                    case LOWEROREQUAL:
+                        t1 = new ASTLowerOrEqual(t1,t2);
+                    break;
+                    case GREATEROREQUAL:
+                        t1 = new ASTGreaterOrEqual(t1,t2);
+                    break;
+                     case LOGICALEQUAL:
+                        t1 = new ASTLogicalEqual(t1,t2);
+                    break;
+                    default:
+    			}
+    			})?
+  { return t1;}
+}
+
+ASTNode Exp() :
+{ Token op;
+  ASTNode t1, t2; }
+{
+   t1=Term() ( LOOKAHEAD(2) ( op=<PLUS> | op=<MINUS> ) t2=Term() {
+    			if (op.kind == PLUS)
+    				t1 = new ASTPlus(t1,t2);
+                else
+                	t1 = new ASTSub(t1,t2); })*
+  { return t1;}
+}
+
+ASTNode Term() :
+{Token op;
+  ASTNode t1, t2;}
+{
+   t1=Fact() (
+        LOOKAHEAD(2) ( op=<TIMES> | op=<DIV> ) t2=Term() {
+    			if (op.kind == TIMES)
+    				t1 = new ASTTimes(t1,t2);
+                else
+                	t1 = new ASTDiv(t1,t2); })*
+  { return t1;}
+}
+
+
+ASTNode Fact() :
+{ Token n,n2;
+  ASTNode t, t1,t2;
+  Map<String, ASTNode> l = new HashMap<String, ASTNode>();
+  List<String> params = new ArrayList();
+  List<ASTNode> values = new ArrayList();
+}
+{
+   ( n=<Num> { t = new ASTNum(Integer.parseInt(n.image));}
+   | <LPAR> t=S() <RPAR>
+   | n =<BOOLEAN> {t = new ASTBoolean(Boolean.parseBoolean(n.image));}
+   | <PRINTLN> <LPAR> t1 = S() <RPAR> {t = new ASTPrintln(t1);}
+   | <FUN>{params.clear();} n=<Id> <LPAR> (LOOKAHEAD(2) n2=<Id>{params.add(n2.image);})? (n2=<Id>{params.add(n2.image);})?(<COMMA> n2=<Id>{params.add(n2.image);})*<RPAR> t1 = Fact(){t=new ASTFunctionEnv(n.image,new VFun(t1,params,n.image));}
+   | LOOKAHEAD(2) n = <Id> <LPAR> (t1= SE(){values.clear();values.add(t1);})? (<COMMA> t1= SE() {values.add(t1);})* <RPAR>{t = new ASTFunction(values,n.image);}
+   | n =<Id> { t = new ASTId(n.image);}
+   | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
+   | <NEW> t1=Fact() {t = new ASTNew(t1);}
+   | <REF> t1=Fact() { t = new ASTDeref(t1); }
+   | <IF> t=SE() <LBRA> t1 = S() <RBRA> <LBRA>t2 = S() <RBRA> { t = new ASTIf(t,t1,t2); }
+   | <WHILE> t1=SE() <LBRA> t2=S() <RBRA> { t = new ASTWhile(t1, t2); }
+   | <LBRA> (<LET> n=<Id> <EQUAL> t1=BA() { l.put(n.image, t1); } <SEMCOL> )* t2=S() <RBRA>  { t = new ASTDef(l, t2); }
+   | <MINUS> t1=Fact() { t = new ASTNeg(t1);}
+   | <NOT> t1=Fact() {t = new ASTNot(t1);}
+   )
+
+   { return t; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
