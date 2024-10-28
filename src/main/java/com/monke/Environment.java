@@ -1,11 +1,8 @@
-package src.main.java.com.monke;
+package com.monke;
 
-import src.main.java.com.monke.exceptions.IDDeclaredTwiceException;
-import src.main.java.com.monke.exceptions.UndeclaredIdentifierException;
+import com.monke.exceptions.IDDeclaredTwiceException;
+import com.monke.exceptions.UndeclaredIdentifierException;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,6 +1,4 @@
-package src.main.java.com.monke.values;
-
-import src.main.java.com.monke.values.IValue;
+package com.monke.values;
 
 public class VBool implements IValue {
 

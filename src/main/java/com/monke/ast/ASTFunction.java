@@ -1,12 +1,11 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.ast.ASTNode;
-import src.main.java.com.monke.exceptions.BadNumberOfParamsException;
-import src.main.java.com.monke.values.IValue;
-import src.main.java.com.monke.values.VFun;
+import com.monke.Environment;
+import com.monke.exceptions.BadNumberOfParamsException;
+import com.monke.values.IValue;
+import com.monke.values.VFun;
 
-import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.List;
 
 public class ASTFunction implements ASTNode {
@@ -21,9 +20,9 @@ public class ASTFunction implements ASTNode {
     @Override
     public IValue eval(Environment<IValue> e) {
         Environment env = new Environment();
-        var fun = ((VFun) e.find(id));
-        var paramsIterator = fun.getParams().iterator();
-        var valuesIterator = values.iterator();
+        VFun fun = ((VFun) e.find(id));
+        Iterator<String> paramsIterator = fun.getParams().iterator();
+        Iterator<ASTNode> valuesIterator = values.iterator();
 
         env.assoc(fun.id, fun);
 

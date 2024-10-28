@@ -1,4 +1,4 @@
-package src.main.java.com.monke.values;
+package com.monke.values;
 
 public interface IValue {
     String	toString();

@@ -1,11 +1,9 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.exceptions.TypeErrorException;
-import src.main.java.com.monke.values.IValue;
-import src.main.java.com.monke.values.VInt;
-
-import java.io.FileNotFoundException;
+import com.monke.Environment;
+import com.monke.exceptions.TypeErrorException;
+import com.monke.values.IValue;
+import com.monke.values.VInt;
 
 public class ASTDiv implements ASTNode {
     ASTNode lhs, rhs;
@@ -20,8 +18,7 @@ public class ASTDiv implements ASTNode {
         IValue v1 = lhs.eval(e);
         IValue v2 = rhs.eval(e);
         if (v1 instanceof VInt && v2 instanceof VInt) {
-            IValue value = new VInt(((VInt) v1).getValue() / ((VInt) v2).getValue());
-            return value;
+            return new VInt(((VInt) v1).getValue() / ((VInt) v2).getValue());
         }
 
         throw new TypeErrorException("Division");

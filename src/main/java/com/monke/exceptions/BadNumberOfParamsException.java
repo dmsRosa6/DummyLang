@@ -1,4 +1,4 @@
-package src.main.java.com.monke.exceptions;
+package com.monke.exceptions;
 
 public class BadNumberOfParamsException extends RuntimeException {
 

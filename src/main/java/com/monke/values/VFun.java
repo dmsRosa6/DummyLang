@@ -1,7 +1,6 @@
-package src.main.java.com.monke.values;
+package com.monke.values;
 
-import src.main.java.com.monke.ast.ASTNode;
-import src.main.java.com.monke.values.IValue;
+import com.monke.ast.ASTNode;
 
 import java.util.List;
 

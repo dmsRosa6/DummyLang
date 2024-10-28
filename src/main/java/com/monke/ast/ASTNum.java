@@ -1,8 +1,9 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.values.IValue;
-import src.main.java.com.monke.values.VInt;
+
+import com.monke.Environment;
+import com.monke.values.IValue;
+import com.monke.values.VInt;
 
 public class ASTNum implements ASTNode {
 

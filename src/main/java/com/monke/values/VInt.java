@@ -1,4 +1,4 @@
-package src.main.java.com.monke.values;
+package com.monke.values;
 
 public class VInt implements IValue{
     int v;

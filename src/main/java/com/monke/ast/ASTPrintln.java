@@ -1,7 +1,7 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.values.IValue;
+import com.monke.Environment;
+import com.monke.values.IValue;
 
 public class ASTPrintln implements ASTNode {
 
@@ -15,7 +15,7 @@ public class ASTPrintln implements ASTNode {
     public IValue eval(Environment<IValue> e) {
         IValue value = body.eval(e);
         System.out.println(value);
-        return value;
+        return null;
     }
 
 }

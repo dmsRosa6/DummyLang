@@ -1,9 +1,10 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.exceptions.TypeErrorException;
-import src.main.java.com.monke.values.IValue;
-import src.main.java.com.monke.values.VBool;
+
+import com.monke.Environment;
+import com.monke.exceptions.TypeErrorException;
+import com.monke.values.IValue;
+import com.monke.values.VBool;
 
 public class ASTWhile implements ASTNode {
 

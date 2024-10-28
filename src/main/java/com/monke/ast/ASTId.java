@@ -1,12 +1,12 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.values.IValue;
+import com.monke.Environment;
+import com.monke.values.IValue;
 
 public class ASTId implements ASTNode {
     private String id;
 
-    ASTId(String id) {
+    public ASTId(String id) {
         this.id = id;
     }
 

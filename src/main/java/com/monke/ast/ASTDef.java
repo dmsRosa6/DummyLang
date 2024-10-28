@@ -1,12 +1,9 @@
-package src.main.java.com.monke.ast;
+package com.monke.ast;
 
-import src.main.java.com.monke.Environment;
-import src.main.java.com.monke.ast.ASTAssign;
-import src.main.java.com.monke.values.IValue;
+import com.monke.Environment;
+import com.monke.values.IValue;
 
-import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.HashMap;
 
 public class ASTDef implements ASTNode {
 
