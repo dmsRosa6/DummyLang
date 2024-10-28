@@ -2,6 +2,8 @@ package com.monke;
 
 
 import com.monke.ast.ASTNode;
+import com.monke.parser.Parser;
+import com.monke.values.IValue;
 
 public class MonkeInterpreter {
 
@@ -12,7 +14,11 @@ public class MonkeInterpreter {
             try {
                 System.out.print("> ");
                 exp = parser.Start();
-                System.out.println(exp.eval(new Environment<>()));
+
+                IValue v = exp.eval(new Environment<>());
+                if (v != null)
+                    System.out.println("Eval: " + v);
+
             } catch (Exception e) {
                 System.out.println("Syntax Error!");
                 System.out.println(e.getMessage());
