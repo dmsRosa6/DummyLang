@@ -2,7 +2,7 @@
 
 # Step 1: Generate parser files from Parser0.jj using JavaCC
 echo "Generating parser files from Parser0.jj..."
-java -cp "./javacc-javacc-7.0.10/target/javacc.jar" javacc Parser0.jj
+java -cp "./javacc-javacc-7.0.13/target/javacc.jar" javacc Parser0.jj
 
 # Check if parser generation was successful
 if [ $? -ne 0 ]; then

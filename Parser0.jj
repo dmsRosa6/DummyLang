@@ -60,7 +60,11 @@ TOKEN :
   |
   < PLUS : "+" >
   |
+  < INC : "++" >
+  |
   < MINUS : "-">
+  |
+  < DEC : "--">
   |
   < TIMES : "*">
   |
@@ -168,13 +172,24 @@ ASTNode Exp() :
 { Token op;
   ASTNode t1, t2; }
 {
-   t1=Term() ( LOOKAHEAD(2) ( op=<PLUS> | op=<MINUS> ) t2=Term() {
-    			if (op.kind == PLUS)
-    				t1 = new ASTPlus(t1,t2);
-                else
-                	t1 = new ASTSub(t1,t2); })*
-  { return t1;}
+   t1=Term() (
+       LOOKAHEAD(1) ( op=<INC> | op=<DEC> ) {
+           if (op.kind == INC){
+               t1 = new ASTIncrement(t1);
+           }else
+               t1 = new ASTDecrement(t1);
+       }
+       | LOOKAHEAD(2) ( op=<PLUS> | op=<MINUS> ) t2=Term() {
+           if (op.kind == PLUS)
+               t1 = new ASTPlus(t1, t2);
+           else
+               t1 = new ASTSub(t1, t2);
+       }
+   )*
+   { return t1; }
 }
+
+
 
 ASTNode Term() :
 {Token op;
