@@ -4,7 +4,7 @@ import com.monke.Environment;
 import com.monke.values.IValue;
 
 public class ASTId implements ASTNode {
-    private String id;
+    private final String id;
 
     public ASTId(String id) {
         this.id = id;

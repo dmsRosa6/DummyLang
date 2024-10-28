@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Environment<T> {
-    private Environment<T> previousEnv;
-    private Map<String, T> variables;
+    private final Environment<T> previousEnv;
+    private final Map<String, T> variables;
     private boolean has_ref;
 
     public Environment() {
@@ -38,7 +38,7 @@ public class Environment<T> {
     }
 
     public Environment<T> beginScope() {
-        return new Environment(this);
+        return new Environment<>(this);
     }
 
     public Environment<T> endScope() {
