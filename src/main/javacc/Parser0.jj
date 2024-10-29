@@ -100,14 +100,23 @@ ASTNode Start():
 }
 
 ASTNode S():
-{Token op;
-     ASTNode t1, t2;}
+{ ASTNode t1, t2; }
 {
-  t1 = SE() ( LOOKAHEAD(2) <SEMCOL> t2=SE() {
-    t1 = new ASTSemCol(t1, t2);
-    })*
+   (
+        <LBRA> t1 = SS() <RBRA> { t1 = new ASTEnv(t1); }
+      |
+        t1 = SS()
+      )
+      { return t1; }
+}
 
-  { return t1;}
+ASTNode SS():
+{ ASTNode t1, t2; }
+{
+   t1 = SE() (<SEMCOL> t2 = SE() {
+       t1 = new ASTSemCol(t1, t2);
+   })*
+   { return t1; }
 }
 
 ASTNode SE():
@@ -230,7 +239,6 @@ ASTNode Fact() :
    | <REF> t1=Fact() { t = new ASTDeref(t1); }
    | <IF> t=SE() <LBRA> t1 = S() <RBRA> <LBRA>t2 = S() <RBRA> { t = new ASTIf(t,t1,t2); }
    | <WHILE> t1=SE() <LBRA> t2=S() <RBRA> { t = new ASTWhile(t1, t2); }
-   | <LBRA> (<LET> n=<Id> <EQUAL> t1=BA() { l.put(n.image, t1); } <SEMCOL> )* t2=S() <RBRA>  { t = new ASTDef(l, t2); }
    | <MINUS> t1=Fact() { t = new ASTNeg(t1);}
    | <NOT> t1=Fact() {t = new ASTNot(t1);}
    )
