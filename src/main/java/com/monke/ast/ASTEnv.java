@@ -13,9 +13,9 @@ public class ASTEnv implements ASTNode{
 
     @Override
     public IValue eval(Environment<IValue> e){
-        e.beginScope();
+        e = e.beginScope();
         IValue v = body.eval(e);
-        e.endScope();
+        e = e.endScope();
         return v;
     }
 }

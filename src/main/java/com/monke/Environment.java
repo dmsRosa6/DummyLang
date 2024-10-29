@@ -9,12 +9,10 @@ import java.util.Map;
 public class Environment<T> {
     private final Environment<T> previousEnv;
     private final Map<String, T> variables;
-    private boolean has_ref;
 
     public Environment() {
         previousEnv = null;
         variables = new HashMap<>();
-        has_ref = false;
     }
 
     public Environment(Environment<T> e) {
@@ -43,13 +41,5 @@ public class Environment<T> {
 
     public Environment<T> endScope() {
         return previousEnv;
-    }
-
-    public boolean hasRef() {
-        Environment<T> env = this;
-        while (!has_ref && env.previousEnv != null) {
-            env = env.previousEnv;
-        }
-        return has_ref;
     }
 }

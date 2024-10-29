@@ -104,21 +104,21 @@ ASTNode Start():
 ASTNode S():
 { ASTNode t1, t2; }
 {
-   (
-        <LBRA> t1 = SS() <RBRA> { t1 = new ASTEnv(t1); }
-      |
-        t1 = SS()
-      )
-      { return t1; }
+  t1 = SS() ( <SEMCOL> t2 = SS() {
+         t1 = new ASTSemCol(t1, t2);
+     })*
+     { return t1; }
 }
 
 ASTNode SS():
-{ ASTNode t1, t2; }
+{ ASTNode t1; }
 {
-   t1 = SE() (<SEMCOL> t2 = SE() {
-       t1 = new ASTSemCol(t1, t2);
-   })*
-   { return t1; }
+ (
+    <LBRA> t1 = S() <RBRA> { t1 = new ASTEnv(t1); }
+  |
+    t1 = SE()
+  )
+  { return t1; }
 }
 
 ASTNode SE():
@@ -142,7 +142,6 @@ ASTNode SE():
     )
     { return t1; }
 }
-
 
 ASTNode BA():
 {
@@ -237,9 +236,9 @@ ASTNode Term() :
 ASTNode Fact() :
 { Token n,n2;
   ASTNode t, t1,t2;
-  Map<String, ASTNode> l = new HashMap<String, ASTNode>();
-  List<String> params = new ArrayList();
-  List<ASTNode> values = new ArrayList();
+  Map<String, ASTNode> l = new HashMap<>();
+  List<String> params = new ArrayList<>();
+  List<ASTNode> values = new ArrayList<>();
 }
 {
    ( n=<NUM> { t = new ASTNum(Integer.parseInt(n.image));}
@@ -250,7 +249,7 @@ ASTNode Fact() :
    //| LOOKAHEAD(2) n = <ID> <LPAR> (t1= SE(){values.clear();values.add(t1);})? (<COMMA> t1= SE() {values.add(t1);})* <RPAR>{t = new ASTFunction(values,n.image);}
    | n =<ID> { t = new ASTId(n.image);}
    | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
-   | <REF> t1=Fact() { t = new ASTDeref(t1); }
+   | (<REF> t1=Fact() { t = new ASTDeref(t1); })+
    | <IF> t=SE() <LBRA> t1 = S() <RBRA> <LBRA>t2 = S() <RBRA> { t = new ASTIf(t,t1,t2); }
    | <WHILE> t1=SE() <LBRA> t2=S() <RBRA> { t = new ASTWhile(t1, t2); }
    | <MINUS> t1=Fact() { t = new ASTNeg(t1);}
