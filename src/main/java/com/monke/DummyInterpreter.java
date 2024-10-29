@@ -5,7 +5,7 @@ import com.monke.ast.ASTNode;
 import com.monke.parser.Parser;
 import com.monke.values.IValue;
 
-public class MonkeInterpreter {
+public class DummyInterpreter {
 
     public static void main(String args[]) {
         Parser parser = new Parser(System.in);
