@@ -10,12 +10,13 @@ public class MonkeInterpreter {
     public static void main(String args[]) {
         Parser parser = new Parser(System.in);
         ASTNode exp;
+        Environment<IValue> env = new Environment<>();
         while (true) {
             try {
                 System.out.print("> ");
                 exp = parser.Start();
 
-                IValue v = exp.eval(new Environment<>());
+                IValue v = exp.eval(env);
                 if (v != null)
                     System.out.println("Eval: " + v);
 
