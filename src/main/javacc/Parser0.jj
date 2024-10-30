@@ -187,14 +187,7 @@ ASTNode Exp() :
 { Token op;
   ASTNode t1, t2; }
 {
-   t1=Term() (
-       LOOKAHEAD(1) ( op=<INC> | op=<DEC> ) {
-           if (op.kind == INC){
-               t1 = new ASTIncrement(t1);
-           }else
-               t1 = new ASTDecrement(t1);
-       }
-       | LOOKAHEAD(2) ( op=<PLUS> | op=<MINUS> ) t2=Term() {
+   t1=Term() (( op=<PLUS> | op=<MINUS> ) t2=Term() {
            if (op.kind == PLUS)
                t1 = new ASTPlus(t1, t2);
            else
@@ -211,7 +204,7 @@ ASTNode Term() :
   ASTNode t1, t2;}
 {
    t1=Fact() (
-        LOOKAHEAD(2) ( op=<TIMES> | op=<DIV> ) t2=Term() {
+        ( op=<TIMES> | op=<DIV> ) t2=Term() {
     			if (op.kind == TIMES)
     				t1 = new ASTTimes(t1,t2);
                 else
@@ -233,8 +226,8 @@ ASTNode Fact() :
    | <LPAR> t=S() <RPAR>
    | n =<BOOLEAN> {t = new ASTBoolean(Boolean.parseBoolean(n.image));}
    | <PRINTLN> <LPAR> t1 = S() <RPAR> {t = new ASTPrintln(t1);}
-   //| <FUN>{params.clear();} n=<Id> <LPAR> (LOOKAHEAD(2) n2=<Id>{params.add(n2.image);})? (n2=<Id>{params.add(n2.image);})?(<COMMA> n2=<Id>{params.add(n2.image);})*<RPAR> t1 = Fact(){t=new ASTFunctionEnv(n.image,new VFun(t1,params,n.image));}
-   //| LOOKAHEAD(2) n = <ID> <LPAR> (t1= SE(){values.clear();values.add(t1);})? (<COMMA> t1= SE() {values.add(t1);})* <RPAR>{t = new ASTFunction(values,n.image);}
+   | <FUN>{params.clear();} n=<ID> <LPAR> (n2=<ID>{params.add(n2.image);})?(<COMMA> n2=<ID>{params.add(n2.image);})*<RPAR> t1 = S(){t=new ASTFunctionEnv(n.image,new VFun(t1,params,n.image));}
+   | LOOKAHEAD(2) n = <ID> <LPAR> (t1 = SE() { values.clear(); values.add(t1); })? (<COMMA> t1 = SE() { values.add(t1); })* <RPAR> { t = new ASTFunction(values, n.image); }
    | n =<ID> { t = new ASTId(n.image);}
    | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
    | (<REF> t1=Fact() { t = new ASTDeref(t1); })+
