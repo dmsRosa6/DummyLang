@@ -3,6 +3,7 @@ package com.monke.ast;
 import com.monke.Environment;
 import com.monke.exceptions.TypeErrorException;
 import com.monke.values.IValue;
+import com.monke.values.VFloat;
 import com.monke.values.VInt;
 
 public class ASTNeg implements ASTNode {
@@ -17,8 +18,11 @@ public class ASTNeg implements ASTNode {
         IValue v = node.eval(e);
 
         if (v instanceof VInt) {
-            IValue value = new VInt(-((VInt) v).getValue());
-            return value;
+            return new VInt(-((VInt) v).getValue());
+        }
+
+        if (v instanceof VFloat) {
+            return new VFloat(-((VFloat) v).getValue());
         }
 
         throw new TypeErrorException("Negative");

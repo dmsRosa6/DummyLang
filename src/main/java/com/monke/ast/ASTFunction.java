@@ -19,7 +19,7 @@ public class ASTFunction implements ASTNode {
 
     @Override
     public IValue eval(Environment<IValue> e) {
-        Environment env = new Environment();
+        Environment<IValue> env = new Environment<>();
         VFun fun = ((VFun) e.find(id));
         Iterator<String> paramsIterator = fun.getParams().iterator();
         Iterator<ASTNode> valuesIterator = values.iterator();

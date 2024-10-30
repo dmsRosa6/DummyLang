@@ -13,7 +13,7 @@ public class VInt implements IValue{
         return  Integer.toString(v);
     }
 
-    public int getValue(){
+    public Integer getValue(){
         return v;
     }
 }

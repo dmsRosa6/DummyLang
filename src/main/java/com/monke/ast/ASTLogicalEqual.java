@@ -3,10 +3,7 @@ package com.monke.ast;
 
 import com.monke.Environment;
 import com.monke.exceptions.TypeErrorException;
-import com.monke.values.IValue;
-import com.monke.values.VBool;
-import com.monke.values.VInt;
-import com.monke.values.VString;
+import com.monke.values.*;
 
 public class ASTLogicalEqual implements ASTNode {
     ASTNode lhs, rhs;
@@ -30,6 +27,11 @@ public class ASTLogicalEqual implements ASTNode {
         }
         if (v1 instanceof VBool && v2 instanceof VBool) {
             IValue value = new VBool(((VBool) v1).getValue() == (((VBool) v2).getValue()));
+            return value;
+        }
+
+        if (v1 instanceof VFloat && v2 instanceof VFloat) {
+            IValue value = new VBool(((VFloat) v1).getValue() == (((VFloat) v2).getValue()));
             return value;
         }
         throw new TypeErrorException("Logical equal");

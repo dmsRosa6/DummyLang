@@ -19,8 +19,7 @@ public class ASTNot implements ASTNode {
         IValue v = node.eval(e);
 
         if (v instanceof VBool) {
-            IValue value = new VBool(!((VBool) v).getValue());
-            return value;
+            return new VBool(!((VBool) v).getValue());
         }
 
         throw new TypeErrorException("Not");
