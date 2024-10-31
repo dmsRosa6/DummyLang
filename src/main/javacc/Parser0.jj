@@ -121,10 +121,6 @@ ASTNode SE():
            t1 = new ASTCreate(op.image, new ASTId(n.image), t2);
        }
     |
-      n = <ID> {
-          t1 = new ASTId(n.image);
-      }
-    |
       t1 = BA()
     )
     { return t1; }
@@ -227,7 +223,7 @@ ASTNode Fact() :
    | n =<BOOLEAN> {t = new ASTBoolean(Boolean.parseBoolean(n.image));}
    | <PRINTLN> <LPAR> t1 = S() <RPAR> {t = new ASTPrintln(t1);}
    | <FUN>{params.clear();} n=<ID> <LPAR> (n2=<ID>{params.add(n2.image);})?(<COMMA> n2=<ID>{params.add(n2.image);})*<RPAR> t1 = S(){t=new ASTFunctionEnv(n.image,new VFun(t1,params,n.image));}
-   | LOOKAHEAD(2) n = <ID> <LPAR> (t1 = SE() { values.clear(); values.add(t1); })? (<COMMA> t1 = SE() { values.add(t1); })* <RPAR> { t = new ASTFunction(values, n.image); }
+   | LOOKAHEAD(2) n = <ID> <LPAR> (t1 = BA() { values.clear(); values.add(t1); })? (<COMMA> t1 = BA() { values.add(t1); })* <RPAR> { t = new ASTFunction(values, n.image); }
    | n =<ID> { t = new ASTId(n.image);}
    | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
    | (<REF> t1=Fact() { t = new ASTDeref(t1); })+
