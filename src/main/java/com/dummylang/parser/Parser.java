@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import com.dummylang.values.*;
-import com.dummylang.ast.*;
+import com.monke.ast.*;
 
 public class Parser implements ParserConstants {
-        public Parser() {}
+    public Parser() {}
 
   static final public ASTNode Start() throws ParseException {ASTNode t;
     t = S();
@@ -77,12 +77,16 @@ t1 = new ASTEnv(t1);
 
   static final public ASTNode SE() throws ParseException {Token op, n;
   ASTNode t1, t2;
-    if (jj_2_1(2)) {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ID:{
       n = jj_consume_token(ID);
       jj_consume_token(ASSIGN);
       t2 = BA();
 t1 = new ASTAssign(new ASTId(n.image), t2);
-    } else if (jj_2_2(3)) {
+      break;
+      }
+    case VAR:
+    case CONST:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case VAR:{
         op = jj_consume_token(VAR);
@@ -101,29 +105,27 @@ t1 = new ASTAssign(new ASTId(n.image), t2);
       jj_consume_token(ASSIGN);
       t2 = BA();
 t1 = new ASTCreate(op.image, new ASTId(n.image), t2);
-    } else {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case FUN:
-      case WHILE:
-      case IF:
-      case BOOLEAN:
-      case REF:
-      case PRINTLN:
-      case ID:
-      case INT:
-      case FLOAT:
-      case NOT:
-      case MINUS:
-      case LPAR:
-      case STRING:{
-        t1 = BA();
-        break;
-        }
-      default:
-        jj_la1[3] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+      break;
       }
+    case FUN:
+    case WHILE:
+    case IF:
+    case BOOLEAN:
+    case REF:
+    case PRINTLN:
+    case INT:
+    case FLOAT:
+    case NOT:
+    case MINUS:
+    case LPAR:
+    case STRING:{
+      t1 = BA();
+      break;
+      }
+    default:
+      jj_la1[3] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
 {if ("" != null) return t1;}
     throw new Error("Missing return statement in function");
@@ -134,7 +136,7 @@ t1 = new ASTCreate(op.image, new ASTId(n.image), t2);
     t1 = BM();
     label_2:
     while (true) {
-      if (jj_2_3(2)) {
+      if (jj_2_1(2)) {
         ;
       } else {
         break label_2;
@@ -152,7 +154,7 @@ t1 = new ASTOr(t1,t2);
     t1 = Relop();
     label_3:
     while (true) {
-      if (jj_2_4(2)) {
+      if (jj_2_2(2)) {
         ;
       } else {
         break label_3;
@@ -168,7 +170,7 @@ t1 = new ASTAnd(t1,t2);
   static final public ASTNode Relop() throws ParseException {Token op;
     ASTNode t1, t2;
     t1 = Exp();
-    if (jj_2_5(2)) {
+    if (jj_2_3(2)) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case GREATER:{
         op = jj_consume_token(GREATER);
@@ -371,7 +373,7 @@ t=new ASTFunctionEnv(n.image,new VFun(t1,params,n.image));
       }
     default:
       jj_la1[14] = jj_gen;
-      if (jj_2_6(2)) {
+      if (jj_2_4(2)) {
         n = jj_consume_token(ID);
         jj_consume_token(LPAR);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -519,22 +521,6 @@ t = new ASTNot(t1);
     finally { jj_save(3, xla); }
   }
 
-  static private boolean jj_2_5(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_5()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(4, xla); }
-  }
-
-  static private boolean jj_2_6(int xla)
- {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return (!jj_3_6()); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(5, xla); }
-  }
-
   static private boolean jj_3R_Fact_228_6_21()
  {
     if (jj_scan_token(STRING)) return true;
@@ -547,7 +533,7 @@ t = new ASTNot(t1);
     return false;
   }
 
-  static private boolean jj_3_6()
+  static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAR)) return true;
@@ -606,7 +592,7 @@ t = new ASTNot(t1);
     jj_scanpos = xsp;
     if (jj_3R_Fact_225_6_19()) {
     jj_scanpos = xsp;
-    if (jj_3_6()) {
+    if (jj_3_4()) {
     jj_scanpos = xsp;
     if (jj_3R_Fact_227_6_20()) {
     jj_scanpos = xsp;
@@ -637,20 +623,7 @@ t = new ASTNot(t1);
     return false;
   }
 
-  static private boolean jj_3_2()
- {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(31)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(32)) return true;
-    }
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5()
+  static private boolean jj_3_3()
  {
     Token xsp;
     xsp = jj_scanpos;
@@ -671,14 +644,7 @@ t = new ASTNot(t1);
     return false;
   }
 
-  static private boolean jj_3_1()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_4()
+  static private boolean jj_3_2()
  {
     if (jj_scan_token(AND)) return true;
     if (jj_3R_Relop_159_1_10()) return true;
@@ -703,7 +669,7 @@ t = new ASTNot(t1);
     return false;
   }
 
-  static private boolean jj_3_3()
+  static private boolean jj_3_1()
  {
     if (jj_scan_token(OR)) return true;
     if (jj_3R_BM_147_1_9()) return true;
@@ -777,12 +743,12 @@ t = new ASTNot(t1);
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x0,0xf4000000,0x80000000,0x74000000,0x0,0x0,0x0,0x0,0x0,0x0,0x8000000,0x74000000,0x8000000,0x0,0x44000000,0x30000000,};
+	   jj_la1_0 = new int[] {0x0,0xf4000000,0x80000000,0xf4000000,0x0,0x0,0x0,0x0,0x0,0x0,0x8000000,0x74000000,0x8000000,0x0,0x44000000,0x30000000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x8000000,0x214420f9,0x1,0x204420f8,0xc700,0x50000,0x50000,0x300000,0x300000,0x20,0x0,0x204420f8,0x0,0x8,0x4000d0,0x20042028,};
+	   jj_la1_1 = new int[] {0x8000000,0x214420f9,0x1,0x204420f9,0xc700,0x50000,0x50000,0x300000,0x300000,0x20,0x0,0x204420f8,0x0,0x8,0x4000d0,0x20042028,};
 	}
-  static final private JJCalls[] jj_2_rtns = new JJCalls[6];
+  static final private JJCalls[] jj_2_rtns = new JJCalls[4];
   static private boolean jj_rescan = false;
   static private int jj_gc = 0;
 
@@ -1065,7 +1031,7 @@ t = new ASTNot(t1);
 
   static private void jj_rescan_token() {
 	 jj_rescan = true;
-	 for (int i = 0; i < 6; i++) {
+	 for (int i = 0; i < 4; i++) {
 	   try {
 		 JJCalls p = jj_2_rtns[i];
 
@@ -1077,8 +1043,6 @@ t = new ASTNot(t1);
 			   case 1: jj_3_2(); break;
 			   case 2: jj_3_3(); break;
 			   case 3: jj_3_4(); break;
-			   case 4: jj_3_5(); break;
-			   case 5: jj_3_6(); break;
 			 }
 		   }
 		   p = p.next;

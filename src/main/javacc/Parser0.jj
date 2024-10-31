@@ -8,8 +8,7 @@ import com.dummylang.values.*;
 import com.monke.ast.*;
 
 public class Parser {
-	public Parser() {}
-}}
+    public Parser() {}
 }
 
 PARSER_END(Parser)
@@ -79,7 +78,7 @@ TOKEN : {
 |	<EQUAL: "=">
 |	<SEMCOL: ";">
 |	<FINAL: ";;">
-|	<STRING: "\"" (["a"-"z", "A"-"Z", "0"-"9", " ", ".", "!", "?", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "="])+ "\"" >
+|	<STRING: "\"" (~["\""])+ "\"" >
 }
 
 ASTNode Start():
@@ -114,13 +113,13 @@ ASTNode SE():
   ASTNode t1, t2; }
 {
     (
-      LOOKAHEAD(2) n = <ID> <ASSIGN> t2=BA() {
+      n = <ID> <ASSIGN> t2=BA() {
           t1 = new ASTAssign(new ASTId(n.image), t2);
       }
     |
-      LOOKAHEAD(3) (op = <VAR> | op = <CONST>) n = <ID> <ASSIGN> t2=BA() {
-           t1 = new ASTCreate(op.image, new ASTId(n.image), t2);
-       }
+      (op = <VAR> | op = <CONST>) n = <ID> <ASSIGN> t2=BA() {
+          t1 = new ASTCreate(op.image, new ASTId(n.image), t2);
+      }
     |
       t1 = BA()
     )

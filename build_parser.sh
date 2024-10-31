@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Define the package and paths
-PACKAGE_NAME="com.monke.parser"
+PACKAGE_NAME="com.dummylang.parser"
 PACKAGE_LINE="package ${PACKAGE_NAME};"
 GENERATED_DIR="target/generated-sources/javacc"
 TARGET_DIR="src/main/java/${PACKAGE_NAME//./\/}"
 
 # Step 1: Run Maven generate-sources
 echo "Running Maven generate-sources..."
-mvn generate-sources
+mvn generate-sources -e
 
 # Check if Maven command succeeded
 if [[ $? -ne 0 ]]; then
