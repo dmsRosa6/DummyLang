@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import com.dummylang.values.*;
-import com.monke.ast.*;
+import com.dummylang.ast.*;
 
 public class Parser {
     public Parser() {}
@@ -14,7 +14,6 @@ public class Parser {
 PARSER_END(Parser)
 
 SKIP : {
-	// Basic whitespace characters
 	" "           // Regular space
 |	"\t"          // Horizontal tab
 |	"\n"          // Newline
@@ -113,8 +112,8 @@ ASTNode SE():
   ASTNode t1, t2; }
 {
     (
-      n = <ID> <ASSIGN> t2=BA() {
-          t1 = new ASTAssign(new ASTId(n.image), t2);
+      LOOKAHEAD(2) n = <ID> <ASSIGN> t2=BA() {
+              t1 = new ASTAssign(new ASTId(n.image), t2);
       }
     |
       (op = <VAR> | op = <CONST>) n = <ID> <ASSIGN> t2=BA() {
@@ -193,8 +192,6 @@ ASTNode Exp() :
    { return t1; }
 }
 
-
-
 ASTNode Term() :
 {Token op;
   ASTNode t1, t2;}
@@ -208,30 +205,53 @@ ASTNode Term() :
   { return t1;}
 }
 
-
 ASTNode Fact() :
-{ Token n,n2;
-  ASTNode t, t1,t2;
-  Map<String, ASTNode> l = new HashMap<>();
-  List<String> params = new ArrayList<>();
-  List<ASTNode> values = new ArrayList<>();
+{
+    Token n, n2;
+    ASTNode t, t1, t2;
+    Map<String, ASTNode> l = new HashMap<>();
+    List<String> params = new ArrayList<>();
+    List<ASTNode> values = new ArrayList<>();
 }
 {
-   ( n=<INT> { t = new ASTNum("INT",n.image);}
-   | n=<FLOAT> { t = new ASTNum("FLOAT",n.image);}
-   | <LPAR> t=S() <RPAR>
-   | n =<BOOLEAN> {t = new ASTBoolean(Boolean.parseBoolean(n.image));}
-   | <PRINTLN> <LPAR> t1 = S() <RPAR> {t = new ASTPrintln(t1);}
-   | <FUN>{params.clear();} n=<ID> <LPAR> (n2=<ID>{params.add(n2.image);})?(<COMMA> n2=<ID>{params.add(n2.image);})*<RPAR> t1 = S(){t=new ASTFunctionEnv(n.image,new VFun(t1,params,n.image));}
-   | LOOKAHEAD(2) n = <ID> <LPAR> (t1 = BA() { values.clear(); values.add(t1); })? (<COMMA> t1 = BA() { values.add(t1); })* <RPAR> { t = new ASTFunction(values, n.image); }
-   | n =<ID> { t = new ASTId(n.image);}
-   | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
-   | (<REF> t1=Fact() { t = new ASTDeref(t1); })+
-   | <IF> t=SE() <LBRA> t1 = S() <RBRA> <LBRA>t2 = S() <RBRA> { t = new ASTIf(t,t1,t2); }
-   | <WHILE> t1=SE() <LBRA> t2=S() <RBRA> { t = new ASTWhile(t1, t2); }
-   | <MINUS> t1=Fact() { t = new ASTNeg(t1);}
-   | <NOT> t1=Fact() {t = new ASTNot(t1);}
-   )
-
-   { return t; }
+    (
+      n=<INT> { t = new ASTNum("INT", n.image); }
+    | n=<FLOAT> { t = new ASTNum("FLOAT", n.image); }
+    | <LPAR> t=S() <RPAR>
+    | n=<BOOLEAN> { t = new ASTBoolean(Boolean.parseBoolean(n.image)); }
+    | <PRINTLN> <LPAR> t1 = S() <RPAR> { t = new ASTPrintln(t1); }
+    | <FUN> { params.clear(); } n=<ID> <LPAR>
+      (n2=<ID> { params.add(n2.image); })?
+      (<COMMA> n2=<ID> { params.add(n2.image); })*
+      <RPAR> t1 = S()
+      { t = new ASTFunctionEnv(n.image, new VFun(t1, params, n.image)); }
+    | LOOKAHEAD(2) n=<ID> <LPAR>
+      (
+          t1 = BA()
+          {
+              values.clear();
+              values.add(t1);
+          }
+          (
+              <COMMA> t1 = BA() { values.add(t1); }
+          )*
+      )?
+      <RPAR>
+      {
+          t = new ASTFunction(
+              values != null ? values : new ArrayList<>(),
+              n.image
+          );
+      }
+    | n=<ID> { t = new ASTId(n.image); }
+    | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
+    | (<REF> t1=Fact() { t = new ASTDeref(t1); })+
+    | <IF> t=SE() <LBRA> t1 = S() <RBRA> <LBRA> t2 = S() <RBRA>
+      { t = new ASTIf(t, t1, t2); }
+    | <WHILE> t1=SE() <LBRA> t2=S() <RBRA>
+      { t = new ASTWhile(t1, t2); }
+    | <MINUS> t1=Fact() { t = new ASTNeg(t1); }
+    | <NOT> t1=Fact() { t = new ASTNot(t1); }
+    )
+    { return t; }
 }

@@ -54,6 +54,10 @@ public class ASTPlus implements ASTNode {
             return new VFloat(((VInt) v1).getValue() + ((VFloat) v2).getValue());
         }
 
+        if (v1 instanceof VString && v2 instanceof VString) {
+            return new VString(((VString) v1).getValue() + ((VString) v2).getValue());
+        }
+
         throw new TypeErrorException("Sum");
     }
 
