@@ -30,57 +30,59 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int REF = 35;
   /** RegularExpression Id. */
-  int PRINTLN = 36;
+  int POINTER = 36;
   /** RegularExpression Id. */
-  int ID = 37;
+  int PRINTLN = 37;
   /** RegularExpression Id. */
-  int INT = 38;
+  int ID = 38;
   /** RegularExpression Id. */
-  int FLOAT = 39;
+  int INT = 39;
   /** RegularExpression Id. */
-  int LOGICALEQUAL = 40;
+  int FLOAT = 40;
   /** RegularExpression Id. */
-  int LOWER = 41;
+  int LOGICALEQUAL = 41;
   /** RegularExpression Id. */
-  int LOWEROREQUAL = 42;
+  int LOWER = 42;
   /** RegularExpression Id. */
-  int OR = 43;
+  int LOWEROREQUAL = 43;
   /** RegularExpression Id. */
-  int AND = 44;
+  int OR = 44;
   /** RegularExpression Id. */
-  int NOT = 45;
+  int AND = 45;
   /** RegularExpression Id. */
-  int GREATER = 46;
+  int NOT = 46;
   /** RegularExpression Id. */
-  int GREATEROREQUAL = 47;
+  int GREATER = 47;
   /** RegularExpression Id. */
-  int PLUS = 48;
+  int GREATEROREQUAL = 48;
   /** RegularExpression Id. */
-  int INC = 49;
+  int PLUS = 49;
   /** RegularExpression Id. */
-  int MINUS = 50;
+  int INC = 50;
   /** RegularExpression Id. */
-  int DEC = 51;
+  int MINUS = 51;
   /** RegularExpression Id. */
-  int TIMES = 52;
+  int DEC = 52;
   /** RegularExpression Id. */
-  int DIV = 53;
+  int TIMES = 53;
   /** RegularExpression Id. */
-  int LPAR = 54;
+  int DIV = 54;
   /** RegularExpression Id. */
-  int RPAR = 55;
+  int LPAR = 55;
   /** RegularExpression Id. */
-  int LBRA = 56;
+  int RPAR = 56;
   /** RegularExpression Id. */
-  int RBRA = 57;
+  int LBRA = 57;
   /** RegularExpression Id. */
-  int EQUAL = 58;
+  int RBRA = 58;
   /** RegularExpression Id. */
-  int SEMCOL = 59;
+  int EQUAL = 59;
   /** RegularExpression Id. */
-  int FINAL = 60;
+  int SEMCOL = 60;
   /** RegularExpression Id. */
-  int STRING = 61;
+  int FINAL = 61;
+  /** RegularExpression Id. */
+  int STRING = 62;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -123,6 +125,7 @@ public interface ParserConstants {
     "\"new\"",
     "\":=\"",
     "\"!\"",
+    "\"#\"",
     "\"println\"",
     "<ID>",
     "<INT>",

@@ -52,6 +52,7 @@ TOKEN : {
 |	<NEW: "new">
 |	<ASSIGN: ":=">
 |	<REF: "!">
+|	<POINTER: "#">
 |	<PRINTLN: "println">
 |	<ID: ["a"-"z", "A"-"Z"] ( ["a"-"z", "A"-"Z", "0"-"9"] )*>
 |	<INT: (["0"-"9"])+>
@@ -215,7 +216,9 @@ ASTNode Fact() :
 }
 {
     (
-      n=<INT> { t = new ASTNum("INT", n.image); }
+      <REF> t1=Fact() { t = new ASTDeref(t1); }
+    | <POINTER> t1=Fact() { t = new ASTPointer(t1); }
+    | n=<INT> { t = new ASTNum("INT", n.image); }
     | n=<FLOAT> { t = new ASTNum("FLOAT", n.image); }
     | <LPAR> t=S() <RPAR>
     | n=<BOOLEAN> { t = new ASTBoolean(Boolean.parseBoolean(n.image)); }
@@ -245,7 +248,6 @@ ASTNode Fact() :
       }
     | n=<ID> { t = new ASTId(n.image); }
     | n=<STRING> { t = new ASTString(n.image.replaceAll("\\p{P}","")); }
-    | (<REF> t1=Fact() { t = new ASTDeref(t1); })+
     | <IF> t=SE() <LBRA> t1 = S() <RBRA> <LBRA> t2 = S() <RBRA>
       { t = new ASTIf(t, t1, t2); }
     | <WHILE> t1=SE() <LBRA> t2=S() <RBRA>
