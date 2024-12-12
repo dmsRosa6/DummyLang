@@ -1,23 +1,26 @@
 package com.dummylang.ast;
 
 import com.dummylang.Environment;
+import com.dummylang.exceptions.ReturnException;
 import com.dummylang.values.IValue;
 
 public class ASTSemCol implements ASTNode {
+    private final ASTNode first;
+    private final ASTNode second;
 
-    ASTNode lhs, rhs;
-
-    public ASTSemCol(ASTNode l, ASTNode r) {
-        lhs = l;
-        rhs = r;
+    public ASTSemCol(ASTNode first, ASTNode second) {
+        this.first = first;
+        this.second = second;
     }
 
     @Override
     public IValue eval(Environment<IValue> e) {
-        IValue v1 = lhs.eval(e);
-        IValue v2 = rhs.eval(e);
-
-        return v2;
+        try {
+            first.eval(e);
+            return second.eval(e);
+        } catch (ReturnException returnException) {
+            // If first statement is a return, immediately propagate the return
+            throw returnException;
+        }
     }
-
 }

@@ -43,10 +43,12 @@ SKIP : {
 
 TOKEN : {
 	<FUN: "fn">
+|	<RETURN: "return">
 |	<COMMA: ",">
 |	<WHILE: "while">
 |	<IF: "if">
 |	<BOOLEAN: ( "true" | "false")>
+|   <NIL: "nil">
 |	<VAR: "var">
 |	<CONST: "const">
 |	<NEW: "new">
@@ -109,16 +111,26 @@ ASTNode SS():
 }
 
 ASTNode SE():
-{ Token op, n;
+{ Token op, n, p = null,ass = null;
   ASTNode t1, t2; }
 {
     (
-      LOOKAHEAD(2) n = <ID> <ASSIGN> t2=BA() {
-              t1 = new ASTAssign(new ASTId(n.image), t2);
-      }
+       <RETURN> t1 = SS() {
+                t1 = new ASTReturn(t1);
+            }
+      |
+       LOOKAHEAD(2) n = <ID> <ASSIGN> t2=SS() {
+            t1 = new ASTAssign(new ASTId(n.image), t2);
+       }
+      |
+       op = <VAR> (p = <POINTER>)? n = <ID> {
+            boolean isPointer = (p != null);
+            t1 = new ASTCreate(op.image,isPointer, new ASTId(n.image), null);
+       }
     |
-      (op = <VAR> | op = <CONST>) n = <ID> <ASSIGN> t2=BA() {
-          t1 = new ASTCreate(op.image, new ASTId(n.image), t2);
+      (op = <VAR> | op = <CONST>) (p = <POINTER>)? n = <ID> <ASSIGN> t2=SS() {
+          boolean isPointer = (p != null);
+          t1 = new ASTCreate(op.image,isPointer, new ASTId(n.image), t2);
       }
     |
       t1 = BA()
@@ -217,9 +229,9 @@ ASTNode Fact() :
 {
     (
       <REF> t1=Fact() { t = new ASTDeref(t1); }
-    | <POINTER> t1=Fact() { t = new ASTPointer(t1); }
     | n=<INT> { t = new ASTNum("INT", n.image); }
     | n=<FLOAT> { t = new ASTNum("FLOAT", n.image); }
+    | n=<NIL> {t = new ASTNil();}
     | <LPAR> t=S() <RPAR>
     | n=<BOOLEAN> { t = new ASTBoolean(Boolean.parseBoolean(n.image)); }
     | <PRINTLN> <LPAR> t1 = S() <RPAR> { t = new ASTPrintln(t1); }
