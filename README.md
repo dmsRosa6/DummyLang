@@ -1,11 +1,8 @@
 # DummyLang-Interpreter in Java
 
-This project is inspired by Monkey-Lang. Monkey-Lang is a programming language defined in the book *Writing an Interpreter in Go* by Thorsten Ball. This project serves as a practical exploration of language design and implementation concepts.
+This project is inspired by Monkey-Lang. Monkey-Lang is a programming language defined in the book *Writing an Interpreter in Go* by Thorsten Ball. Basically i wanted to apply what is on the book with a twist so used jasmin for the grammar and parser.
 
 ## Features
-
-- **Basic Arithmetic Operations**: Support for addition, subtraction, multiplication, and division.
-- **Control Structures**: Includes conditional statements (if-else) and loops (while).
 
 ## Getting Started
 
@@ -17,15 +14,11 @@ To build and run DummyLang, ensure you have the following installed:
 - Maven
 
 ### Installation
-
-1. Clone the repository:
-    ```bash
-   a
-    ```
    
 ### Examples
 
+### Future
 
-### Possible Missing Funcionality
-
-   1. Writing the compiler for the lang
+   1. More tests
+   2. Better error handling
+   3. Writing the compiler for the lang
