@@ -33,10 +33,7 @@ public class ASTCreate implements ASTNode{
         else
             v = rhs.eval(e);
 
-        if(p)
-            e.assoc(((ASTId) lhs).getId(), type,new VCell(v));
-        else
-            e.assoc(((ASTId) lhs).getId(), type,v);
+        e.assoc(((ASTId) lhs).getId(), type,p,v);
 
         return v;
     }

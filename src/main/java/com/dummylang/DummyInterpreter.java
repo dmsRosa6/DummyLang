@@ -10,9 +10,10 @@ public class DummyInterpreter {
     public static void main(String args[]) {
         Parser parser = new Parser(System.in);
         ASTNode exp;
-        Environment<IValue> env = new Environment<>();
+        Environment<IValue> env;
         while (true) {
             try {
+                env = new Environment<>();
                 System.out.print("> ");
                 exp = parser.Start();
 

@@ -4,15 +4,17 @@ import com.dummylang.exceptions.IDDeclaredTwiceException;
 import com.dummylang.exceptions.NotDynamicException;
 import com.dummylang.exceptions.NotFoundException;
 import com.dummylang.exceptions.UndeclaredIdentifierException;
-import com.dummylang.utils.Pair;
+import com.dummylang.utils.Tuple;
 import com.dummylang.utils.VarType;
+import com.dummylang.values.IValue;
+import com.dummylang.values.VCell;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Environment<T> {
     private final Environment<T> previousEnv;
-    private final Map<String, Pair<VarType, T>> variables;
+    private final Map<String, Tuple<VarType, IValue, Boolean>> variables;
 
     public Environment() {
         previousEnv = null;
@@ -24,14 +26,18 @@ public class Environment<T> {
         variables = new HashMap<>();
     }
 
-    public void assoc(String id, VarType type, T val) throws IDDeclaredTwiceException {
+    public void assoc(String id, VarType type, boolean isPointer, IValue val) throws IDDeclaredTwiceException {
         if (variables.containsKey(id))
             throw new IDDeclaredTwiceException();
-        variables.put(id, new Pair<>(type,val));
+        IValue v = val;
+        if(isPointer){
+            v = new VCell(val);
+        }
+        variables.put(id, new Tuple<>(type,v,isPointer));
     }
 
-    public void update(String id, T val) throws IDDeclaredTwiceException {
-        Pair<VarType, T> v = variables.get(id);
+    public void update(String id, IValue val) throws IDDeclaredTwiceException {
+        Tuple<VarType, IValue, Boolean> v = variables.get(id);
 
         if (v == null)
             throw new NotFoundException();
@@ -39,11 +45,15 @@ public class Environment<T> {
         if(v.getFirst().equals(VarType.CONST)){
             throw new NotDynamicException();
         }
-        variables.put(id, new Pair<>(v.getFirst(),val));
+        IValue value = val;
+        if(v.getThird()){
+            value = new VCell(val);
+        }
+        variables.put(id, new Tuple<>(v.getFirst(),value,v.getThird()));
     }
 
-    public Pair<VarType, T> find(String id) throws UndeclaredIdentifierException {
-        Pair<VarType, T> t = variables.get(id);
+    public Tuple<VarType, IValue,Boolean> find(String id) throws UndeclaredIdentifierException {
+        Tuple<VarType, IValue,Boolean> t = variables.get(id);
         if (t != null) {
             return t;
         }

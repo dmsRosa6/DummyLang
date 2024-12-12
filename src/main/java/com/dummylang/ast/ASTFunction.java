@@ -20,7 +20,7 @@ public class ASTFunction implements ASTNode {
 
     @Override
     public IValue eval(Environment<IValue> e) {
-        Environment<IValue> env = new Environment<>();
+        /*Environment<IValue> env = new Environment<>();
         VFun fun = ((VFun) e.find(id).getSecond());
         Iterator<String> paramsIterator = fun.getParams().iterator();
         Iterator<ASTNode> valuesIterator = values.iterator();
@@ -35,7 +35,8 @@ public class ASTFunction implements ASTNode {
         if (valuesIterator.hasNext())
             throw new BadNumberOfParamsException("Too many parameters on function call");
 
-        return fun.getBody().eval(env);
+        return fun.getBody().eval(env);*/
+        return null;
     }
 
 }

@@ -2,8 +2,6 @@ package com.dummylang.ast;
 
 import com.dummylang.Environment;
 import com.dummylang.exceptions.TypeErrorException;
-import com.dummylang.utils.Pair;
-import com.dummylang.utils.VarType;
 import com.dummylang.values.IValue;
 
 public class ASTAssign implements ASTNode {
@@ -22,6 +20,8 @@ public class ASTAssign implements ASTNode {
         if (! ( lhs instanceof ASTId)){
             throw new TypeErrorException("Left is not an id");
         }
+
+
         String id = ((ASTId) lhs).getId();
 
         e.update(id,v2);

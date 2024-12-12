@@ -123,16 +123,19 @@ ASTNode SE():
             t1 = new ASTAssign(new ASTId(n.image), t2);
        }
       |
-       op = <VAR> (p = <POINTER>)? n = <ID> {
-            boolean isPointer = (p != null);
-            t1 = new ASTCreate(op.image,isPointer, new ASTId(n.image), null);
-       }
-    |
-      (op = <VAR> | op = <CONST>) (p = <POINTER>)? n = <ID> <ASSIGN> t2=SS() {
-          boolean isPointer = (p != null);
-          t1 = new ASTCreate(op.image,isPointer, new ASTId(n.image), t2);
-      }
-    |
+       (op = <VAR> | op = <CONST>) (p = <POINTER>)? n = <ID>
+       (
+           <ASSIGN> t2=SS() {
+               boolean isPointer = (p != null);
+               t1 = new ASTCreate(op.image, isPointer, new ASTId(n.image), t2);
+           }
+           |
+           {
+               boolean isPointer = (p != null);
+               t1 = new ASTCreate(op.image, isPointer, new ASTId(n.image), null);
+           }
+       )
+      |
       t1 = BA()
     )
     { return t1; }
