@@ -30,4 +30,19 @@ public class DummyInterpreter {
             }
         }
     }
+
+    public static String interpret(String input) {
+        try {
+            Environment<IValue> environment = new Environment<>();
+            Parser parser = new Parser(new java.io.StringReader(input));
+            ASTNode exp = parser.Start();
+            parser.ReInit(System.in);
+            IValue result = exp.eval(environment);
+            return result != null ? result.toString() : "No Output";
+        } catch (ReturnException re) {
+            return re.getReturnValue().toString();
+        } catch (Exception e) {
+            return "Syntax Error: " + e.getMessage();
+        }
+    }
 }
