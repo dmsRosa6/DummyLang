@@ -111,31 +111,25 @@ ASTNode SS():
 }
 
 ASTNode SE():
-{ Token op, n, p = null,ass = null;
-  ASTNode t1, t2; }
+{
+  Token op, n, p = null;
+  ASTNode t1, t2 = null;
+}
 {
     (
-       <RETURN> t1 = SS() {
-                t1 = new ASTReturn(t1);
-            }
-      |
-       LOOKAHEAD(2) n = <ID> <ASSIGN> t2=SS() {
-            t1 = new ASTAssign(new ASTId(n.image), t2);
-       }
-      |
-       (op = <VAR> | op = <CONST>) (p = <POINTER>)? n = <ID>
-       (
-           <ASSIGN> t2=SS() {
-               boolean isPointer = (p != null);
-               t1 = new ASTCreate(op.image, isPointer, new ASTId(n.image), t2);
-           }
-           |
-           {
-               boolean isPointer = (p != null);
-               t1 = new ASTCreate(op.image, isPointer, new ASTId(n.image), null);
-           }
-       )
-      |
+      <RETURN> t1 = SS() {
+          t1 = new ASTReturn(t1);
+      }
+    |
+      LOOKAHEAD(2) n = <ID> <ASSIGN> t2=SS() {
+          t1 = new ASTAssign(new ASTId(n.image), t2);
+      }
+    |
+      (op = <VAR> | op = <CONST>) (p = <POINTER>)? n = <ID> (<ASSIGN> t2=SS())? {
+          boolean isPointer = (p != null);
+          t1 = new ASTCreate(op.image, isPointer, new ASTId(n.image), t2);
+      }
+    |
       t1 = BA()
     )
     { return t1; }
@@ -241,7 +235,7 @@ ASTNode Fact() :
     | <FUN> { params.clear(); } n=<ID> <LPAR>
       (n2=<ID> { params.add(n2.image); })?
       (<COMMA> n2=<ID> { params.add(n2.image); })*
-      <RPAR> t1 = S()
+      <RPAR> <LBRA> t1 = S() <RBRA>
       { t = new ASTFunctionEnv(n.image, new VFun(t1, params, n.image)); }
     | LOOKAHEAD(2) n=<ID> <LPAR>
       (

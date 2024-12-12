@@ -23,6 +23,10 @@ public class ASTCreate implements ASTNode{
     @Override
     public IValue eval(Environment<IValue> e) {
 
+        if(p && type.equals(VarType.CONST)){
+            throw new TypeErrorException("Const cant be a pointer");
+        }
+
         if(!(lhs instanceof ASTId)){
             throw new TypeErrorException("Not an ID");
         }

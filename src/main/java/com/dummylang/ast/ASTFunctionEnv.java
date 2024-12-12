@@ -17,9 +17,10 @@ public class ASTFunctionEnv implements ASTNode {
 
     @Override
     public IValue eval(Environment<IValue> e) {
-        //e.assoc(id, VarType.CONST,fun);
-        //return fun;
-        return null;
+        // Associate the function with its identifier in the environment
+        e.assoc(id, VarType.CONST, false,fun);
+        // Return the function itself
+        return fun;
     }
 
 }

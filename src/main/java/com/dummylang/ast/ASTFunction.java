@@ -20,23 +20,25 @@ public class ASTFunction implements ASTNode {
 
     @Override
     public IValue eval(Environment<IValue> e) {
-        /*Environment<IValue> env = new Environment<>();
-        VFun fun = ((VFun) e.find(id).getSecond());
-        Iterator<String> paramsIterator = fun.getParams().iterator();
-        Iterator<ASTNode> valuesIterator = values.iterator();
+        // Create a new environment for function execution
+        Environment<IValue> env = new Environment<>(e); // Consider using the parent environment
 
-        env.assoc(fun.id, VarType.CONST, fun);
+        // Retrieve the function from the environment
+        VFun fun = (VFun) e.find(id).getSecond();
 
-        while (paramsIterator.hasNext()) {
-            if (!valuesIterator.hasNext())
-                throw new BadNumberOfParamsException("Not enough parameters on function call");
-            env.assoc(paramsIterator.next(), VarType.VAR, valuesIterator.next().eval(e));
+        // Check if the number of provided arguments matches the function's parameters
+        if (values.size() != fun.getParams().size()) {
+            throw new BadNumberOfParamsException("Incorrect number of parameters");
         }
-        if (valuesIterator.hasNext())
-            throw new BadNumberOfParamsException("Too many parameters on function call");
 
-        return fun.getBody().eval(env);*/
-        return null;
+        // Bind function parameters to their argument values
+        List<String> params = fun.getParams();
+        for (int i = 0; i < params.size(); i++) {
+            env.assoc(params.get(i), VarType.VAR, false, values.get(i).eval(e));
+        }
+
+        // Execute the function body in the new environment
+        return fun.getBody().eval(env);
     }
 
 }

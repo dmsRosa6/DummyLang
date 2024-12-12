@@ -11,9 +11,9 @@ public class DummyInterpreter {
         Parser parser = new Parser(System.in);
         ASTNode exp;
         Environment<IValue> env;
+        env = new Environment<>();
         while (true) {
             try {
-                env = new Environment<>();
                 System.out.print("> ");
                 exp = parser.Start();
 
