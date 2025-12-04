@@ -5,6 +5,7 @@ This project is a playful twist on Monkey-Lang, inspired by the book *Writing an
 
 ## Features
 - **Variable and Constant Declarations**: Declare variables (`var a;`, `var a := 10;`) and constants (`const b := 20;`) to store values.
+- **Scopes**: Declare scopes (`{...}`).
 - **Pointer Operations**: Access memory locations and manipulate data with pointers (`var #p := 1.1;!p;`, `var #a :=1; var #p := !a;`).
 - **Control Flow**: Use loops (`while`, `for`) and functions to structure your code (`fn f(n,j){...}`).
 - **Recursive Functions**: Implement recursive functions, like calculating Fibonacci numbers.
