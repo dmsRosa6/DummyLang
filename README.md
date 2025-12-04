@@ -38,3 +38,4 @@ Check out the tests in `DummyLangTests` for examples on how DummyLang handles:
 - More tests for edge cases
 - Enhanced error handling
 - Developing a compiler for DummyLang
+- Proper documentation and examples
